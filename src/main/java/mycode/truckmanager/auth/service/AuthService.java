@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Value("${app.security.admin-password-hash}")
+    @Value("${app.security.admin-password-hash:}")
     private String adminPasswordHash;
 
     private final PasswordEncoder passwordEncoder;
@@ -26,8 +26,7 @@ public class AuthService {
 
         String rawPassword = request.password().trim();
 
-        // Compară parola introdusă cu hash-ul BCrypt
-        if (!passwordEncoder.matches(rawPassword, adminPasswordHash)) {
+        if (adminPasswordHash == null || adminPasswordHash.isBlank() || !passwordEncoder.matches(rawPassword, adminPasswordHash)) {
             throw new BadCredentialsException("Parolă incorectă");
         }
 
