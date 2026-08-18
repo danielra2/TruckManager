@@ -6,17 +6,18 @@ import mycode.truckmanager.auth.dtos.AuthResponse;
 import mycode.truckmanager.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Value("${app.security.admin-password-hash:}")
-    private String adminPasswordHash;
+    @Value("${app.security.admin-password:}")
+    private String adminPassword;
 
-    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
     public AuthResponse login(AuthRequest request) {
@@ -26,7 +27,17 @@ public class AuthService {
 
         String rawPassword = request.password().trim();
 
-        if (adminPasswordHash == null || adminPasswordHash.isBlank() || !passwordEncoder.matches(rawPassword, adminPasswordHash)) {
+        if (adminPassword == null || adminPassword.isBlank()) {
+            throw new BadCredentialsException("Parola de administrator nu este configurată pe server");
+        }
+
+        // Comparație sigură la nivel de octeți (previne atacurile de tip timing attack)
+        boolean matches = MessageDigest.isEqual(
+                rawPassword.getBytes(StandardCharsets.UTF_8),
+                adminPassword.trim().getBytes(StandardCharsets.UTF_8)
+        );
+
+        if (!matches) {
             throw new BadCredentialsException("Parolă incorectă");
         }
 
