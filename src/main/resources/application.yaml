@@ -30,7 +30,7 @@ server:
 
 app:
  security:
-  admin-password-hash: ${APP_SECURITY_ADMIN_PASSWORD_HASH:$2a$10$q1WcKkS4p0mS9sS17aZ0v.6uW8Gv6H8pM4kL6jM6bA2tB7aP7w1cO}
+  admin-password-hash: "$2a$10$8cG91Tv1l5PflrTfjBaucOkFer1knFnAwpb5Y0OxXK1LzZFAxavbO"
   jwt:
    secret: ${APP_SECURITY_JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
    expiration-ms: 86400000
