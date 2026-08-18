@@ -1,16 +1,21 @@
 package mycode.truckmanager.trucks.dtos;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record TruckResponseDto(
         Long id,
         String licensePlate,
         String make,
         String model,
-        DocumentDetail itp,
-        DocumentDetail insurance,
-        DocumentDetail tacho,
-        DocStatus overallStatus,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDate vgpExpiryDate,
+        LocalDate itvExpiryDate,
+        LocalDate limitVExpiryDate,
+        LocalDate tGrafoExpiryDate,
+        LocalDate seguroExpiryDate,
+        DocumentDetail vgp,
+        DocumentDetail itv,
+        DocumentDetail limitV,
+        DocumentDetail tGrafo,
+        DocumentDetail seguro,
+        DocStatus overallStatus
 ) {}

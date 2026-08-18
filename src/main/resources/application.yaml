@@ -24,12 +24,11 @@ spring:
   open-in-view: false
 
 server:
- port: 8081
+ port: 8090
 
-# Setari Securitate & JWT
 app:
  security:
-  admin-password-hash: "$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi"
+  admin-password-hash: "$2a$10$hUs2V2NgmqxIO2pAgKWOMOQH1TO2ELKQEaje23Ko9qCiFxSBzBMYS"
   jwt:
    secret: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
    expiration-ms: 86400000

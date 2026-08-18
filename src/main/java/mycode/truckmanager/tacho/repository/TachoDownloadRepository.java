@@ -1,14 +1,14 @@
-package mycode.truckmanager.trucks.repository;
+package mycode.truckmanager.tacho.repository;
 
-import mycode.truckmanager.trucks.models.Truck;
+import mycode.truckmanager.tacho.models.TachoDownload;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface TruckRepository extends JpaRepository<Truck, Long> {
+public interface TachoDownloadRepository extends JpaRepository<TachoDownload, Long> {
+    List<TachoDownload> findAllByOrderByNextDownloadDateAsc();
     boolean existsByLicensePlateIgnoreCase(String licensePlate);
     boolean existsByLicensePlateIgnoreCaseAndIdNot(String licensePlate, Long id);
-    Optional<Truck> findByLicensePlateIgnoreCase(String licensePlate);
 }

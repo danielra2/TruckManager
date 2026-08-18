@@ -19,10 +19,12 @@ public class TruckCommandServiceImpl implements TruckCommandService {
 
     @Override
     public TruckResponseDto createTruck(TruckRequestDto dto) {
-        if (truckRepository.existsByLicensePlateIgnoreCase(dto.licensePlate().trim())) {
-            throw new IllegalArgumentException("Există deja un camion cu numărul de înmatriculare: " + dto.licensePlate());
+        String cleanPlate = dto.licensePlate().trim().toUpperCase();
+        if (truckRepository.existsByLicensePlateIgnoreCase(cleanPlate)) {
+            throw new IllegalArgumentException("Există deja un camion cu numărul: " + cleanPlate);
         }
         Truck truck = truckMapper.toEntity(dto);
+        truck.setLicensePlate(cleanPlate);
         return truckMapper.toResponseDto(truckRepository.save(truck));
     }
 
@@ -31,17 +33,20 @@ public class TruckCommandServiceImpl implements TruckCommandService {
         Truck existingTruck = truckRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Camionul cu ID-ul " + id + " nu a fost găsit."));
 
-        if (!existingTruck.getLicensePlate().equalsIgnoreCase(dto.licensePlate().trim())
-                && truckRepository.existsByLicensePlateIgnoreCase(dto.licensePlate().trim())) {
-            throw new IllegalArgumentException("Numărul de înmatriculare " + dto.licensePlate() + " este deja folosit de alt camion.");
+        String cleanPlate = dto.licensePlate().trim().toUpperCase();
+
+        if (truckRepository.existsByLicensePlateIgnoreCaseAndIdNot(cleanPlate, id)) {
+            throw new IllegalArgumentException("Numărul de înmatriculare " + cleanPlate + " este deja folosit de alt camion.");
         }
 
-        existingTruck.setLicensePlate(dto.licensePlate().trim().toUpperCase());
+        existingTruck.setLicensePlate(cleanPlate);
         existingTruck.setMake(dto.make().trim());
         existingTruck.setModel(dto.model().trim());
-        existingTruck.setItpExpiryDate(dto.itpExpiryDate());
-        existingTruck.setInsuranceExpiryDate(dto.insuranceExpiryDate());
-        existingTruck.setTachoExpiryDate(dto.tachoExpiryDate());
+        existingTruck.setVgpExpiryDate(dto.vgpExpiryDate());
+        existingTruck.setItvExpiryDate(dto.itvExpiryDate());
+        existingTruck.setLimitVExpiryDate(dto.limitVExpiryDate());
+        existingTruck.setTGrafoExpiryDate(dto.tGrafoExpiryDate());
+        existingTruck.setSeguroExpiryDate(dto.seguroExpiryDate());
 
         return truckMapper.toResponseDto(truckRepository.save(existingTruck));
     }
