@@ -45,14 +45,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             username,
                             null,
-                            List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ADMIN"))
+                            List.of(
+                                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                                    new SimpleGrantedAuthority("ADMIN"),
+                                    new SimpleGrantedAuthority("ROLE_USER"),
+                                    new SimpleGrantedAuthority("USER")
+                            )
                     );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
         } catch (Exception e) {
-            logger.error("Eroare la validarea token-ului JWT: " + e.getMessage());
+            System.err.println("JWT Filter error: " + e.getMessage());
         }
 
         filterChain.doFilter(request, response);
