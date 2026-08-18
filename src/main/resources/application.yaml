@@ -2,33 +2,35 @@ spring:
  application:
   name: TruckManager
  datasource:
-  url: jdbc:mysql://127.0.0.1:3306/truck_manager_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&createDatabaseIfNotExist=true
-  username: root
-  password: Dani.17072003
+  url: ${SPRING_DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/truck_manager_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&createDatabaseIfNotExist=true}
+  username: ${SPRING_DATASOURCE_USERNAME:root}
+  password: ${SPRING_DATASOURCE_PASSWORD:Dani.17072003}
   driver-class-name: com.mysql.cj.jdbc.Driver
   hikari:
    pool-name: HikariPool
-   minimum-idle: 5
-   maximum-pool-size: 10
+   minimum-idle: 1
+   maximum-pool-size: 5
    idle-timeout: 60000
    connection-timeout: 30000
    max-lifetime: 1800000
 
  jpa:
+  database-platform: org.hibernate.dialect.MySQLDialect
   hibernate:
    ddl-auto: update
   show-sql: true
   properties:
    hibernate:
+    dialect: org.hibernate.dialect.MySQLDialect
     format_sql: true
   open-in-view: false
 
 server:
- port: 8090
+ port: ${PORT:8090}
 
 app:
  security:
-  admin-password-hash: "$2a$10$hUs2V2NgmqxIO2pAgKWOMOQH1TO2ELKQEaje23Ko9qCiFxSBzBMYS"
+  admin-password-hash: ${APP_SECURITY_ADMIN_PASSWORD_HASH:$2a$10$q1WcKkS4p0mS9sS17aZ0v.6uW8Gv6H8pM4kL6jM6bA2tB7aP7w1cO}
   jwt:
-   secret: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+   secret: ${APP_SECURITY_JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
    expiration-ms: 86400000
