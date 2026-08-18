@@ -20,11 +20,15 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     public AuthResponse login(AuthRequest request) {
-        boolean matchesHash = passwordEncoder.matches(request.password(), adminPasswordHash);
-        boolean matchesPlain = "daniel".equals(request.password());
+        if (request == null || request.password() == null) {
+            throw new BadCredentialsException("Parolă invalidă");
+        }
 
-        if (!matchesHash && !matchesPlain) {
-            throw new BadCredentialsException("Parola introdusă este incorectă.");
+        String rawPassword = request.password().trim();
+
+        // Compară parola introdusă cu hash-ul BCrypt
+        if (!passwordEncoder.matches(rawPassword, adminPasswordHash)) {
+            throw new BadCredentialsException("Parolă incorectă");
         }
 
         String token = jwtUtil.generateToken("admin");
